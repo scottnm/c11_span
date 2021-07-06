@@ -61,26 +61,44 @@ inline void make_span_default(void* data, size_t count) { (void)data;(void)count
     default: make_span_default \
 )(data, count)
 
-    /*
-// FIXME: tmp till generics
+/*
 #define span_first(span, count) _Generic((span), \
     ci8_span: span_first_ci8 \
 )(span, count)
-
-#define span_skip(span, count) _Generic((span), \
-    ci8_span: span_skip_ci8 \
-)(span, count)
-
 inline ci8_span span_first_ci8(ci8_span span, size_t first_n)
 {
     return (ci8_span) { .data = span.data, .count = first_n };
 }
+*/
+#define DEFINE_SPAN_FIRST(value_type, short_name) \
+    inline \
+    short_name ## _span \
+    span_first_ ## short_name( \
+        short_name ## _span span, \
+        size_t first_n) \
+    { \
+        return (short_name ## _span) { .data = span.data, .count = first_n }; \
+    }
+C11_SPAN_TYPES(DEFINE_SPAN_FIRST)
+
+#define SET_GENERIC_SPAN_FIRST_DEFINITION(value_type, short_name) \
+    short_name ## _span : span_first_ ## short_name, \
+
+inline void span_first_default(void* span, size_t first_n) { (void)span;(void)first_n; }
+#define span_first(data, count) _Generic((data), \
+    C11_SPAN_TYPES(SET_GENERIC_SPAN_FIRST_DEFINITION) \
+    default: span_first_default \
+)(data, count)
+
+// FIXME: tmp till generics
+#define span_skip(span, count) _Generic((span), \
+    ci8_span: span_skip_ci8 \
+)(span, count)
 
 inline ci8_span span_skip_ci8(ci8_span span, size_t skip_n)
 {
     return (ci8_span) { .data = span.data + skip_n, .count = span.count - skip_n };
 }
-*/
 
 /*
 void span_first_common(
