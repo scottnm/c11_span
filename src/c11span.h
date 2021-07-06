@@ -31,8 +31,7 @@
     typedef struct { \
         value_type * data; \
         size_t count; \
-    } short_name ## _span; \
-
+    } short_name ## _span;
 C11_SPAN_TYPES(DECLARE_STRUCTS)
 
 // PROVIDED SPAN OPERATIONS
@@ -42,11 +41,28 @@ C11_SPAN_TYPES(DECLARE_STRUCTS)
 // data
 // size
 
-// FIXME: tmp till generics
+#define DEFINE_MAKE_SPAN(value_type, short_name) \
+    inline \
+    short_name ## _span \
+    make_span_ ## short_name( \
+        value_type * data, \
+        size_t count) \
+    { \
+        return (short_name ## _span) { .data = data, .count = count }; \
+    }
+C11_SPAN_TYPES(DEFINE_MAKE_SPAN)
+
+#define SET_GENERIC_MAKE_SPAN_DEFINITION(value_type, short_name) \
+    value_type* : make_span_ ## short_name, \
+
+inline void make_span_default(void* data, size_t count) { (void)data;(void)count; }
 #define make_span(data, count) _Generic((data), \
-    const int8_t*: make_span_ci8 \
+    C11_SPAN_TYPES(SET_GENERIC_MAKE_SPAN_DEFINITION) \
+    default: make_span_default \
 )(data, count)
 
+    /*
+// FIXME: tmp till generics
 #define span_first(span, count) _Generic((span), \
     ci8_span: span_first_ci8 \
 )(span, count)
@@ -54,11 +70,6 @@ C11_SPAN_TYPES(DECLARE_STRUCTS)
 #define span_skip(span, count) _Generic((span), \
     ci8_span: span_skip_ci8 \
 )(span, count)
-
-inline ci8_span make_span_ci8(const int8_t* data, size_t count)
-{
-    return (ci8_span) { .data = data, .count = count };
-}
 
 inline ci8_span span_first_ci8(ci8_span span, size_t first_n)
 {
@@ -69,6 +80,7 @@ inline ci8_span span_skip_ci8(ci8_span span, size_t skip_n)
 {
     return (ci8_span) { .data = span.data + skip_n, .count = span.count - skip_n };
 }
+*/
 
 /*
 void span_first_common(
