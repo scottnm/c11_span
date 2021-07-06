@@ -35,12 +35,10 @@
 C11_SPAN_TYPES(DECLARE_STRUCTS)
 
 // PROVIDED SPAN OPERATIONS
-// make
-// first
-// subspan
-// data
-// size
 
+//
+// span_make
+//
 #define DEFINE_MAKE_SPAN(value_type, short_name) \
     inline \
     short_name ## _span \
@@ -61,15 +59,9 @@ inline void make_span_default(void* data, size_t count) { (void)data;(void)count
     default: make_span_default \
 )(data, count)
 
-/*
-#define span_first(span, count) _Generic((span), \
-    ci8_span: span_first_ci8 \
-)(span, count)
-inline ci8_span span_first_ci8(ci8_span span, size_t first_n)
-{
-    return (ci8_span) { .data = span.data, .count = first_n };
-}
-*/
+//
+// span_first
+//
 #define DEFINE_SPAN_FIRST(value_type, short_name) \
     inline \
     short_name ## _span \
@@ -90,34 +82,25 @@ inline void span_first_default(void* span, size_t first_n) { (void)span;(void)fi
     default: span_first_default \
 )(data, count)
 
-// FIXME: tmp till generics
-#define span_skip(span, count) _Generic((span), \
-    ci8_span: span_skip_ci8 \
-)(span, count)
+//
+// span_skip
+//
+#define DEFINE_SPAN_SKIP(value_type, short_name) \
+    inline \
+    short_name ## _span \
+    span_skip_ ## short_name( \
+        short_name ## _span span, \
+        size_t skip_n) \
+    { \
+        return (short_name ## _span) { .data = span.data + skip_n, .count = span.count - skip_n }; \
+    }
+C11_SPAN_TYPES(DEFINE_SPAN_SKIP)
 
-inline ci8_span span_skip_ci8(ci8_span span, size_t skip_n)
-{
-    return (ci8_span) { .data = span.data + skip_n, .count = span.count - skip_n };
-}
+#define SET_GENERIC_SPAN_SKIP_DEFINITION(value_type, short_name) \
+    short_name ## _span : span_skip_ ## short_name, \
 
-/*
-void span_first_common(
-    void* data,
-    size_t data_size,
-    size_t first,
-    void* out_data,
-    void* out_data_size)
-{
-}
-*/
-
-/*
-void span_first_common(
-    void* data,
-    size_t data_size,
-    size_t first,
-    void* out_data,
-    void* out_data_size)
-{
-}
-*/
+inline void span_skip_default(void* span, size_t skip_n) { (void)span;(void)skip_n; }
+#define span_skip(data, count) _Generic((data), \
+    C11_SPAN_TYPES(SET_GENERIC_SPAN_SKIP_DEFINITION) \
+    default: span_skip_default \
+)(data, count)
