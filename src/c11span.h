@@ -2,6 +2,13 @@
 
 #include <stdint.h>
 
+//
+// PROVIDED SPAN OPERATIONS
+// span_type span_make(value_type data, size_t count);
+// span_type span_first(span_type span, size_t first_n);
+// span_type span_skip(span_type span, size_t skip_n);
+//
+
 // A DEFAULT SET OF SPANTYPE DEFINITIONS
 // TOP PROVIDE A CUSTOM SET OF SPAN TYPES UNCOMMENT THE NEXT LINE AND DEFINE YOUR OWN
 
@@ -33,8 +40,6 @@
         size_t count; \
     } short_name ## _span;
 C11_SPAN_TYPES(DECLARE_STRUCTS)
-
-// PROVIDED SPAN OPERATIONS
 
 //
 // span_make
