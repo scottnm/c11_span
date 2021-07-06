@@ -48,6 +48,16 @@ inline ci8_span make_span(const int8_t* data, size_t count)
     return (ci8_span) { .data = data, .count = count };
 }
 
+inline ci8_span span_first(ci8_span span, size_t first_n)
+{
+    return (ci8_span) { .data = span.data, .count = first_n };
+}
+
+inline ci8_span span_skip(ci8_span span, size_t skip_n)
+{
+    return (ci8_span) { .data = span.data + skip_n, .count = span.count - skip_n };
+}
+
 /*
 void span_first_common(
     void* data,
