@@ -3,8 +3,13 @@
 
 #include "c11span.h"
 
-int main(int, char**)
+#define UNREF(x) do { (void)(x); } while(0)
+
+int main(int argc, char** argv)
 {
-    printf("Hello, World!");
+    UNREF(argc);
+    UNREF(argv);
+
+    printf("Hello, World!\n");
     return 0;
 }
