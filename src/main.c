@@ -14,22 +14,24 @@ int main(int argc, char** argv)
     const int8_t numbers[] = { -120, 10, 2 };
     ci8_span nspan = make_span(numbers, ARRAYSIZE(numbers));
 
-    for (size_t i = 0; i < nspan.size; ++i)
+    /*
+    for (size_t i = 0; i < nspan.count; ++i)
     {
         ci8_span first_n = span_first(nspan, i);
-        for (size_t j = 0; j < first_n.size; ++j)
+        for (size_t j = 0; j < first_n.count; ++j)
         {
             printf("%i ", first_n.data[i]);
         }
 
         printf("| ");
         ci8_span rest_n = span_rest(nspan, i);
-        for (size_t j = 0; j < rest_n.size; ++j)
+        for (size_t j = 0; j < rest_n.count; ++j)
         {
             printf("%i ", rest_n.data[i]);
         }
         printf("\n");
     }
+    */
 
     // FIXME: improvment
     // foreach_span(int8_t, e, nspan)

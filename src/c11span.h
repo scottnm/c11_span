@@ -3,9 +3,11 @@
 #include <stdint.h>
 
 // A DEFAULT SET OF SPANTYPE DEFINITIONS
-// TOP PROVIDE A CUSTOM SET OF SPAN TYPES UNDEF THE DEFAULT SET AND DEFINE YOUR OWN
+// TOP PROVIDE A CUSTOM SET OF SPAN TYPES UNCOMMENT THE NEXT LINE AND DEFINE YOUR OWN
 
-#define SPAN_TYPES(macro) \
+#ifndef C11_SPAN_CUSTOM_SPAN_TYPES
+
+#define C11_SPAN_TYPES(macro) \
     macro(uint8_t, u8) \
     macro(const uint8_t, cu8) \
     macro(uint16_t, u16) \
@@ -23,11 +25,39 @@
     macro(int64_t, i64) \
     macro(const int64_t, ci64) \
 
+#endif // !C11_SPAN_CUSTOM_SPAN_TYPES
+
+#define DECLARE_STRUCTS(value_type, short_name) \
+    typedef struct { \
+        value_type * data; \
+        size_t count; \
+    } short_name ## _span; \
+
+C11_SPAN_TYPES(DECLARE_STRUCTS)
+
 // PROVIDED SPAN OPERATIONS
+// make
 // first
 // subspan
 // data
 // size
+
+// FIXME: tmp till generics
+inline ci8_span make_span(const int8_t* data, size_t count)
+{
+    return (ci8_span) { .data = data, .count = count };
+}
+
+/*
+void span_first_common(
+    void* data,
+    size_t data_size,
+    size_t first,
+    void* out_data,
+    void* out_data_size)
+{
+}
+*/
 
 /*
 void span_first_common(
