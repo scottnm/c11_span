@@ -39,24 +39,24 @@ C11_SPAN_TYPES(DECLARE_STRUCTS)
 //
 // span_make
 //
-#define DEFINE_MAKE_SPAN(value_type, short_name) \
+#define DEFINE_SPAN_MAKE(value_type, short_name) \
     inline \
     short_name ## _span \
-    make_span_ ## short_name( \
+    span_make_ ## short_name( \
         value_type * data, \
         size_t count) \
     { \
         return (short_name ## _span) { .data = data, .count = count }; \
     }
-C11_SPAN_TYPES(DEFINE_MAKE_SPAN)
+C11_SPAN_TYPES(DEFINE_SPAN_MAKE)
 
-#define SET_GENERIC_MAKE_SPAN_DEFINITION(value_type, short_name) \
-    value_type* : make_span_ ## short_name, \
+#define SET_GENERIC_SPAN_MAKE_DEFINITION(value_type, short_name) \
+    value_type* : span_make_ ## short_name, \
 
-inline void make_span_default(void* data, size_t count) { (void)data;(void)count; }
-#define make_span(data, count) _Generic((data), \
-    C11_SPAN_TYPES(SET_GENERIC_MAKE_SPAN_DEFINITION) \
-    default: make_span_default \
+inline void span_make_default(void* data, size_t count) { (void)data;(void)count; }
+#define span_make(data, count) _Generic((data), \
+    C11_SPAN_TYPES(SET_GENERIC_SPAN_MAKE_DEFINITION) \
+    default: span_make_default \
 )(data, count)
 
 //

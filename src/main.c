@@ -12,8 +12,7 @@ int main(int argc, char** argv)
     UNREF(argv);
 
     const int8_t numbers[] = { -120, 10, 2 };
-    // FIXME: span_make?
-    ci8_span nspan = make_span(numbers, ARRAYSIZE(numbers));
+    ci8_span nspan = span_make(numbers, ARRAYSIZE(numbers));
 
     for (size_t i = 0; i < nspan.count; ++i)
     {
