@@ -6,6 +6,11 @@ One of the features from C++ that I miss somewhat though is support for spans (e
 
 This is a prototype implementation of providing an interface/utility much like that for C using C11's [`_Generic` support](https://en.cppreference.com/w/c/language/generic).
 
+## Files
+
+* _src/main.c_ - a simple demo of the span utilities
+* _src/c11span.h_ - the header only implementation
+
 ## Features
 
 gsl::span | c11 span equivalent
