@@ -43,17 +43,29 @@ C11_SPAN_TYPES(DECLARE_STRUCTS)
 // size
 
 // FIXME: tmp till generics
-inline ci8_span make_span(const int8_t* data, size_t count)
+#define make_span(data, count) _Generic((data), \
+    const int8_t*: make_span_ci8 \
+)(data, count)
+
+#define span_first(span, count) _Generic((span), \
+    ci8_span: span_first_ci8 \
+)(span, count)
+
+#define span_skip(span, count) _Generic((span), \
+    ci8_span: span_skip_ci8 \
+)(span, count)
+
+inline ci8_span make_span_ci8(const int8_t* data, size_t count)
 {
     return (ci8_span) { .data = data, .count = count };
 }
 
-inline ci8_span span_first(ci8_span span, size_t first_n)
+inline ci8_span span_first_ci8(ci8_span span, size_t first_n)
 {
     return (ci8_span) { .data = span.data, .count = first_n };
 }
 
-inline ci8_span span_skip(ci8_span span, size_t skip_n)
+inline ci8_span span_skip_ci8(ci8_span span, size_t skip_n)
 {
     return (ci8_span) { .data = span.data + skip_n, .count = span.count - skip_n };
 }
